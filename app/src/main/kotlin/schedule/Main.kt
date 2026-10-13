@@ -20,6 +20,7 @@ fun runApplication(
         output("Invalid arguments")
         return 2
     }
+
     return try {
         when (command) {
             is Command.Period -> handlers.period(command)
