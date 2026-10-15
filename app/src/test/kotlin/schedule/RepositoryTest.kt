@@ -3,7 +3,6 @@ package schedule
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 class RepositoryTest {
     private val day = LocalDate.of(2026, 10, 10)

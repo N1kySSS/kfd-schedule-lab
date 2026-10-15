@@ -13,22 +13,67 @@ object StudentCommandHandlers : CommandHandlers {
 }
 
 fun runPeriod(command: Command.Period): Int {
-    // TODO: parse every line of command.file, filter by command.from..command.to,
-    // print the selected sessions and Total, return 0 or 1.
-    println("Not implemented: period")
-    return 2
+    var total = 0
+    var rejected = 0
+
+    forEachScheduleLine(command.file) { number, line ->
+        val result = parseLine(number, line)
+
+        if (result is ParseResult.Success) {
+            val date = result.session.date
+
+            if (date in command.from..command.to) {
+                println(formatPeriodLine(result.session))
+                total++
+            }
+        } else {
+            rejected++
+        }
+    }
+
+    println("Total: $total")
+
+    return if (rejected > 0) 1 else 0
 }
 
 fun runType(command: Command.ByType): Int {
-    // TODO: parse every line of command.file, filter by command.type,
-    // print the selected sessions with teachers and Total, return 0 or 1.
-    println("Not implemented: type")
-    return 2
+    var total = 0
+    var rejected = 0
+
+    forEachScheduleLine(command.file) { number, line ->
+        val result = parseLine(number, line)
+
+        if (result is ParseResult.Success) {
+            if (sessionTypeOf(result.session) == command.type) {
+                println(formatTypeLine(result.session))
+                total++
+            }
+        } else {
+            rejected++
+        }
+    }
+
+    println("Total: $total")
+
+    return if (rejected > 0) 1 else 0
 }
 
 fun runErrors(command: Command.Errors): Int {
-    // TODO: parse every line of command.file, print formatted rejections
-    // and Rejected: K of M, return 0 or 1.
-    println("Not implemented: errors")
-    return 2
+    var lines = 0
+    var rejected = 0
+
+    forEachScheduleLine(command.file) { number, line ->
+        lines++
+
+        val result = parseLine(number, line)
+
+        if (result is ParseResult.Failure) {
+            println(formatFailure(result))
+            rejected++
+        }
+    }
+
+    println("Rejected: $rejected of $lines")
+
+    return if (rejected > 0) 1 else 0
 }
