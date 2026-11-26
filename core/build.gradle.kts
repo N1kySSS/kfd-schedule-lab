@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    application
 }
 
 kotlin {
@@ -15,12 +14,4 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-}
-
-application {
-    mainClass.set("analyzer.MainKt")
-}
-
-tasks.named<JavaExec>("run") {
-    workingDir = rootProject.projectDir
 }
